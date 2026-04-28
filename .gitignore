@@ -1,51 +1,9 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-node_modules/
+# =========================
+# Dependencies
+# =========================
+/node_modules
 /.pnp
 .pnp.js
-.yarn/install-state.gz
-
-# testing
-/coverage
-*.lcov
-.nyc_output
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-build/Release
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# local env files
-.env
-.env.*
-!.env.example
-.env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# package managers
-.npm
-.pnpm-store
-.pnp.*
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -53,49 +11,70 @@ next-env.d.ts
 !.yarn/sdks
 !.yarn/versions
 
-# cache
-.cache
-.parcel-cache
-.next
-.nuxt
-.output
-.svelte-kit/
-.vite/
-**/.vitepress/dist
-**/.vitepress/cache
-.docusaurus
-.fusebox/
-.dynamodb/
-.firebase/
-.serverless/
-.grunt
+# =========================
+# Next.js build output
+# =========================
+/.next/
+/out/
+/build
 
-# misc
-bower_components
-jspm_packages/
-web_modules/
-lib-cov
-.lock-wscript
-.node_repl_history
-*.tgz
-.yarn-integrity
-.eslintcache
-.stylelintcache
-.tern-port
-.vscode-test
-dist
-.temp
-.vuepress/dist
+# =========================
+# Production
+# =========================
+/dist
 
-# Vite
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
+# =========================
+# Environment variables (IMPORTANT)
+# =========================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# pids
-pids
-*.pid
-*.seed
-*.pid.lock
+# =========================
+# Logs
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# reports
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+# =========================
+# Testing
+# =========================
+/coverage
+
+# =========================
+# Vercel
+# =========================
+.vercel
+
+# =========================
+# TypeScript
+# =========================
+*.tsbuildinfo
+next-env.d.ts
+
+# =========================
+# OS / System files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea
+
+# =========================
+# Misc
+# =========================
+*.pem
+*.log
+*.tmp
+*.cache
