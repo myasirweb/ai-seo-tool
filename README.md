@@ -1,2 +1,13 @@
-# ai-seo-tool
-Free AI-powered SEO toolkit for bloggers &amp; agencies. Keyword research, meta generator, content scorer &amp; readability checker — built with Next.js 14 + OpenAI.
+# AI SEO Tool 🚀
+
+A free, AI-powered SEO toolkit for bloggers, agencies, and businesses.
+No login required. No paywalls. Just results.
+
+## Features
+- 🔍 Keyword Research — 10 suggestions with intent, difficulty & volume
+- ✍️ Meta Generator — 3 optimized title & description variants with SERP preview
+- 📊 Content Score — 100-point SEO rubric with per-category breakdown
+- 📖 Readability Checker — Flesch-Kincaid score + AI writing suggestions
+
+## Stack
+Next.js 14 · TypeScript · Tailwind CSS · OpenAI API · MongoDB · Vercel
