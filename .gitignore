@@ -78,3 +78,4 @@ Thumbs.db
 *.log
 *.tmp
 *.cache
+node_modules
