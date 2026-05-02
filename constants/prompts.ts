@@ -89,3 +89,24 @@ Rules:
 - Focus on sentence length, word choice, paragraph structure, and passive voice
 - Do not wrap the response in markdown code blocks
 - Do not include any text before or after the JSON array`;
+
+// Feature: Blog Title Generator (Phase 8)
+export const BLOG_TITLE_SYSTEM_PROMPT = `You are an expert content strategist and copywriter specializing in SEO-optimized blog titles.
+Return ONLY a valid JSON array, no markdown, no text outside the array.
+
+Format: [
+  {
+    "title": "The actual blog title",
+    "type": "how-to|listicle|question|ultimate-guide|case-study|news|comparison",
+    "reason": "One sentence why this title works for SEO"
+  }
+]
+
+Generate exactly 10 blog titles.
+Rules:
+- Each title must be unique and use a different angle
+- Include the target keyword naturally in each title
+- Titles should be 40-70 characters long
+- Mix different title types (how-to, listicle, question, etc.)
+- Make titles compelling and click-worthy
+- Optimize for search intent`

@@ -1,37 +1,33 @@
-import mongoose, { type Connection } from "mongoose";
+import { MongoClient, Db } from "mongodb"
+
+const uri = process.env.MONGODB_URI!
+const dbName = "ai-seo-tool"
+
+if (!uri) {
+  throw new Error("MONGODB_URI is not set in environment variables")
+}
 
 declare global {
-  var mongoose: { conn: Connection | null; promise: Promise<Connection> | null } | undefined;
+  // eslint-disable-next-line no-var
+  var _mongoClientPromise: Promise<MongoClient> | undefined
 }
 
-const MONGODB_URI = process.env.MONGODB_URI;
+let clientPromise: Promise<MongoClient>
 
-let cached = global.mongoose ?? { conn: null, promise: null };
-
-if (!global.mongoose) {
-  global.mongoose = cached;
+if (process.env.NODE_ENV === "development") {
+  if (!global._mongoClientPromise) {
+    const client = new MongoClient(uri)
+    global._mongoClientPromise = client.connect()
+  }
+  clientPromise = global._mongoClientPromise
+} else {
+  const client = new MongoClient(uri)
+  clientPromise = client.connect()
 }
 
-export default async function connectDB(): Promise<Connection> {
-  if (!MONGODB_URI) {
-    throw new Error("MONGODB_URI is not defined in environment variables");
-  }
-
-  if (cached.conn) {
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    cached.promise = mongoose
-      .connect(MONGODB_URI, { bufferCommands: false })
-      .then((m) => m.connection)
-      .catch((err) => {
-        console.error("MongoDB connection error:", err);
-        cached.promise = null;
-        throw err;
-      });
-  }
-
-  cached.conn = await cached.promise;
-  return cached.conn;
+export async function getDB(): Promise<Db> {
+  const client = await clientPromise
+  return client.db(dbName)
 }
+
+export default clientPromise

@@ -12,7 +12,7 @@
 !.yarn/versions
 
 # =========================
-# Next.js build output
+# Next.js build output 
 # =========================
 /.next/
 /out/
