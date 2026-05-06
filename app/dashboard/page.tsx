@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Search, FileText, BarChart2, BookOpen, ChevronRight, Zap, Type, History } from "lucide-react";
+import { Search, FileText, BarChart2, BookOpen, ChevronRight, Zap, Type, History, Link2, Layers, FileDown, GitCompare } from "lucide-react";
 import Card from "@/components/ui/Card";
 
 interface ToolCard {
@@ -61,6 +61,38 @@ const TOOLS: ToolCard[] = [
     icon:        History,
     iconBg:      "bg-orange-50",
     iconColor:   "text-orange-600",
+  },
+  {
+    href:        "/dashboard/url-analyzer",
+    label:       "URL SEO Analyzer",
+    description: "Analyze any URL for SEO issues — title, meta, headings, images, and AI suggestions.",
+    icon:        Link2,
+    iconBg:      "bg-indigo-50",
+    iconColor:   "text-indigo-600",
+  },
+  {
+    href:        "/dashboard/bulk-keywords",
+    label:       "Bulk Keyword Research",
+    description: "Research up to 5 topics at once and export all results to CSV.",
+    icon:        Layers,
+    iconBg:      "bg-teal-50",
+    iconColor:   "text-teal-600",
+  },
+  {
+    href:        "/dashboard/seo-report",
+    label:       "SEO Report",
+    description: "Generate and download a professional PDF report from your tool history.",
+    icon:        FileDown,
+    iconBg:      "bg-rose-50",
+    iconColor:   "text-rose-600",
+  },
+  {
+    href:        "/dashboard/competitor-analysis",
+    label:       "Competitor Analysis",
+    description: "Compare 2 URLs side by side — SEO scores, title, meta, headings with AI winner analysis.",
+    icon:        GitCompare,
+    iconBg:      "bg-violet-50",
+    iconColor:   "text-violet-600",
   },
 ];
 

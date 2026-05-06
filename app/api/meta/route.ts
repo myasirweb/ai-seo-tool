@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDB } from "@/lib/mongodb";
 import { callGemini, parseJSON } from "@/lib/gemini";
 import { META_SYSTEM_PROMPT } from "@/constants/prompts";
+import { getLanguageByCode } from "@/constants/languages";
 import type { MetaRequest, MetaVariant } from "@/types/meta";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body: MetaRequest = await req.json();
-    const { topic, targetKeyword, tone } = body;
+    const { topic, targetKeyword, tone = "professional", language = "en" } = body as typeof body & { language?: string };
 
     if (!topic || topic.trim() === "") {
       return NextResponse.json({ error: "Topic is required" }, { status: 400 });
@@ -18,7 +19,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const db = await getDB();
 
-    const userMessage = `Topic: ${topic.trim()}\nTarget keyword: ${targetKeyword.trim()}\nTone: ${tone ?? "professional"}`;
+    const lang = getLanguageByCode(language);
+    const userMessage = `${lang.geminiInstruction}\nTopic: ${topic.trim()}\nTarget keyword: ${targetKeyword.trim()}\nTone: ${tone}`;
     const raw = await callGemini(META_SYSTEM_PROMPT, userMessage);
     const variants = parseJSON<MetaVariant[]>(raw);
 

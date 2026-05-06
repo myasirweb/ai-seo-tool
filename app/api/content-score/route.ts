@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDB } from "@/lib/mongodb";
 import { callGemini, parseJSON } from "@/lib/gemini";
 import { CONTENT_SCORE_SYSTEM_PROMPT } from "@/constants/prompts";
+import { getLanguageByCode } from "@/constants/languages";
 import type { ContentScoreRequest, ScoreCategory } from "@/types/contentScore";
 
 interface ScorePayload {
@@ -13,7 +14,7 @@ interface ScorePayload {
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body: ContentScoreRequest = await req.json();
-    const { content, targetKeyword } = body;
+    const { content, targetKeyword, language = "en" } = body as typeof body & { language?: string };
 
     if (!content || content.trim() === "") {
       return NextResponse.json({ error: "Content is required" }, { status: 400 });
@@ -28,7 +29,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const db = await getDB();
 
     const truncatedContent = content.slice(0, 3000);
-    const userMessage = `Target keyword: ${targetKeyword.trim()}\n\nContent:\n${truncatedContent}`;
+    const lang = getLanguageByCode(language);
+    const userMessage = `${lang.geminiInstruction}\nTarget keyword: ${targetKeyword.trim()}\n\nContent:\n${truncatedContent}`;
 
     const raw = await callGemini(CONTENT_SCORE_SYSTEM_PROMPT, userMessage);
     const parsed = parseJSON<ScorePayload>(raw);

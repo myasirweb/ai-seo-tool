@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDB } from "@/lib/mongodb";
 import { callGemini, parseJSON } from "@/lib/gemini";
 import { KEYWORD_SYSTEM_PROMPT } from "@/constants/prompts";
+import { getLanguageByCode } from "@/constants/languages";
 import type { KeywordRequest, KeywordItem } from "@/types/keyword";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body: KeywordRequest = await req.json();
-    const { topic, count } = body;
+    const { topic, count, language = "en" } = body as typeof body & { language?: string };
 
     if (!topic || topic.trim() === "") {
       return NextResponse.json({ error: "Topic is required" }, { status: 400 });
@@ -15,7 +16,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const db = await getDB();
 
-    const userMessage = `Topic: ${topic.trim()}. Generate ${count ?? 10} keywords.`;
+    const lang = getLanguageByCode(language);
+    const userMessage = `${lang.geminiInstruction}\nTopic: ${topic.trim()}. Generate ${count ?? 10} keywords.`;
     const raw = await callGemini(KEYWORD_SYSTEM_PROMPT, userMessage);
     const keywords = parseJSON<KeywordItem[]>(raw);
 

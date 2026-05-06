@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ContentScoreResponse } from "@/types/contentScore";
+import { useLanguage } from "@/context/LanguageContext";
 
 type SuccessResult = Extract<ContentScoreResponse, { score: number }>;
 
@@ -15,6 +16,7 @@ export function useContentScore(): UseContentScoreReturn {
   const [result, setResult] = useState<SuccessResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { language } = useLanguage();
 
   function reset() {
     setResult(null);
@@ -30,7 +32,7 @@ export function useContentScore(): UseContentScoreReturn {
       const res = await fetch("/api/content-score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content, targetKeyword }),
+        body: JSON.stringify({ content, targetKeyword, language: language.code }),
       });
 
       const data: ContentScoreResponse = await res.json();

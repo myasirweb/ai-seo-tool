@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ReadabilityResponse } from "@/types/readability";
+import { useLanguage } from "@/context/LanguageContext";
 
 type SuccessResult = Extract<ReadabilityResponse, { fleschScore: number }>;
 
@@ -15,6 +16,7 @@ export function useReadability(): UseReadabilityReturn {
   const [result, setResult] = useState<SuccessResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { language } = useLanguage();
 
   function reset() {
     setResult(null);
@@ -30,7 +32,7 @@ export function useReadability(): UseReadabilityReturn {
       const res = await fetch("/api/readability", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ content, language: language.code }),
       });
 
       const data: ReadabilityResponse = await res.json();

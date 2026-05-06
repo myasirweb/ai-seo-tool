@@ -7,6 +7,7 @@ import Toast from "@/components/ui/Toast";
 import MobileNav from "@/components/layout/MobileNav";
 import { ToastContext } from "@/context/ToastContext";
 import { useToast } from "@/hooks/useToast";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard":                    "Dashboard",
@@ -16,6 +17,10 @@ const PAGE_TITLES: Record<string, string> = {
   "/dashboard/readability":        "Readability",
   "/dashboard/blog-titles":        "Blog Title Generator",
   "/dashboard/history":            "Search History",
+  "/dashboard/url-analyzer":      "URL SEO Analyzer",
+  "/dashboard/bulk-keywords":     "Bulk Keyword Research",
+  "/dashboard/seo-report":        "SEO Report Generator",
+  "/dashboard/competitor-analysis": "Competitor Analysis",
 };
 
 interface DashboardLayoutProps {
@@ -28,25 +33,27 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { toast, showToast, hideToast } = useToast();
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
-      <div className="flex h-screen bg-gray-50 font-sans">
-        <Sidebar />
-        <div className="flex flex-col flex-1 min-w-0">
-          <Topbar title={currentTitle} />
-          <main className="flex-1 overflow-y-auto p-6 pb-16 md:pb-6">
-            {children}
-          </main>
+    <LanguageProvider>
+      <ToastContext.Provider value={{ showToast }}>
+        <div className="flex h-screen bg-gray-50 font-sans">
+          <Sidebar />
+          <div className="flex flex-col flex-1 min-w-0">
+            <Topbar title={currentTitle} />
+            <main className="flex-1 overflow-y-auto p-6 pb-16 md:pb-6">
+              {children}
+            </main>
+          </div>
         </div>
-      </div>
-      <MobileNav />
+        <MobileNav />
 
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={hideToast}
-        />
-      )}
-    </ToastContext.Provider>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={hideToast}
+          />
+        )}
+      </ToastContext.Provider>
+    </LanguageProvider>
   );
 }

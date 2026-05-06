@@ -12,6 +12,10 @@ import {
   ChevronRight,
   Type,
   History,
+  Link2,
+  Layers,
+  FileDown,
+  GitCompare,
 } from "lucide-react";
 
 interface NavItem {
@@ -28,6 +32,10 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard/readability",      label: "Readability",      icon: BookOpen        },
   { href: "/dashboard/blog-titles",      label: "Blog Titles",      icon: Type            },
   { href: "/dashboard/history",          label: "History",          icon: History         },
+  { href: "/dashboard/url-analyzer",     label: "URL Analyzer",     icon: Link2           },
+  { href: "/dashboard/bulk-keywords",    label: "Bulk Keywords",    icon: Layers          },
+  { href: "/dashboard/seo-report",       label: "SEO Report",       icon: FileDown        },
+  { href: "/dashboard/competitor-analysis", label: "Competitor",    icon: GitCompare      },
 ];
 
 export default function Sidebar() {

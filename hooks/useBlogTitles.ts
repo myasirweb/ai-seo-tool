@@ -2,11 +2,13 @@
 
 import { useState } from "react"
 import { BlogTitleItem } from "@/types/blogTitle"
+import { useLanguage } from "@/context/LanguageContext"
 
 export function useBlogTitles() {
   const [titles, setTitles] = useState<BlogTitleItem[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const { language } = useLanguage()
 
   const fetchTitles = async (keyword: string) => {
     if (!keyword.trim()) return
@@ -18,7 +20,7 @@ export function useBlogTitles() {
       const response = await fetch("/api/blog-titles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword: keyword.trim() }),
+        body: JSON.stringify({ keyword: keyword.trim(), language: language.code }),
       })
 
       const data = await response.json()

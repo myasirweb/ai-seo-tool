@@ -110,3 +110,83 @@ Rules:
 - Mix different title types (how-to, listicle, question, etc.)
 - Make titles compelling and click-worthy
 - Optimize for search intent`
+
+// Feature: URL SEO Analyzer (Phase 9)
+export const URL_ANALYZER_SYSTEM_PROMPT = `You are an expert SEO auditor.
+You will receive extracted data from a webpage.
+Return ONLY a valid JSON object, no markdown, no text outside the object.
+
+Format:
+{
+  "score": 75,
+  "suggestions": [
+    "Specific actionable suggestion 1",
+    "Specific actionable suggestion 2",
+    "Specific actionable suggestion 3",
+    "Specific actionable suggestion 4",
+    "Specific actionable suggestion 5"
+  ]
+}
+
+Score the page from 0-100 based on:
+- Title tag quality (20 points): length 50-60 chars, includes keyword
+- Meta description quality (20 points): length 120-160 chars, compelling
+- Heading structure (20 points): has H1, proper hierarchy
+- Image optimization (15 points): all images have alt text
+- Link structure (15 points): has internal links
+- Content length (10 points): at least 300 words
+
+Provide exactly 5 specific, actionable suggestions based on the actual page data provided.`
+
+// Feature: Competitor Analysis (Phase 10)
+export const COMPETITOR_ANALYSIS_SYSTEM_PROMPT = `You are an expert SEO analyst
+specializing in competitive analysis.
+You will receive SEO data for 2 webpages.
+Return ONLY a valid JSON object, no markdown, no text outside the object.
+
+Format:
+{
+  "winners": [
+    {
+      "category": "Title Tag",
+      "winner": "page1",
+      "reason": "Page 1 has better keyword placement in title"
+    },
+    {
+      "category": "Meta Description",
+      "winner": "page2",
+      "reason": "Page 2 has more compelling description"
+    },
+    {
+      "category": "Content Length",
+      "winner": "tie",
+      "reason": "Both pages have similar word counts"
+    },
+    {
+      "category": "Heading Structure",
+      "winner": "page1",
+      "reason": "Page 1 uses proper H1/H2/H3 hierarchy"
+    },
+    {
+      "category": "Image Optimization",
+      "winner": "page2",
+      "reason": "Page 2 has all images with alt text"
+    }
+  ],
+  "overallWinner": "page1",
+  "overallReason": "Page 1 ranks higher due to better title optimization and heading structure",
+  "page1Suggestions": [
+    "Specific improvement for page 1 suggestion 1",
+    "Specific improvement for page 1 suggestion 2",
+    "Specific improvement for page 1 suggestion 3"
+  ],
+  "page2Suggestions": [
+    "Specific improvement for page 2 suggestion 1",
+    "Specific improvement for page 2 suggestion 2",
+    "Specific improvement for page 2 suggestion 3"
+  ]
+}
+
+Analyze ALL categories: title, meta description, content length,
+heading structure, image optimization, link building.
+Be specific and data-driven in your reasons.`

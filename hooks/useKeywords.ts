@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { KeywordItem } from "@/types/keyword";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface UseKeywordsReturn {
   keywords: KeywordItem[];
@@ -13,6 +14,7 @@ export function useKeywords(): UseKeywordsReturn {
   const [keywords, setKeywords] = useState<KeywordItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { language } = useLanguage();
 
   function reset() {
     setKeywords([]);
@@ -28,7 +30,7 @@ export function useKeywords(): UseKeywordsReturn {
       const res = await fetch("/api/keywords", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic }),
+        body: JSON.stringify({ topic, language: language.code }),
       });
 
       const data: { keywords?: KeywordItem[]; error?: string } = await res.json();

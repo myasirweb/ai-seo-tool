@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDB } from "@/lib/mongodb";
 import { callGemini, parseJSON } from "@/lib/gemini";
 import { READABILITY_SYSTEM_PROMPT } from "@/constants/prompts";
+import { getLanguageByCode } from "@/constants/languages";
 import { analyzeReadability } from "@/lib/readability";
 import type { ReadabilityRequest } from "@/types/readability";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body: ReadabilityRequest = await req.json();
-    const { content } = body;
+    const { content, language = "en" } = body as typeof body & { language?: string };
 
     if (!content || content.trim() === "") {
       return NextResponse.json({ error: "Content is required" }, { status: 400 });
@@ -26,8 +27,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const db = await getDB();
 
-    const userMessage =
-      `Flesch score: ${fleschScore} (${label}). Avg sentence length: ${avgSentenceLength} words. Word count: ${wordCount}.\nContent sample:\n${content.slice(0, 800)}`;
+    const lang = getLanguageByCode(language);
+    const userMessage = `${lang.geminiInstruction}\nFlesch score: ${fleschScore} (${label}). Avg sentence length: ${avgSentenceLength} words. Word count: ${wordCount}.\nContent sample:\n${content.slice(0, 800)}`;
 
     const raw = await callGemini(READABILITY_SYSTEM_PROMPT, userMessage);
     const suggestions = parseJSON<string[]>(raw);

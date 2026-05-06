@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { MetaVariant } from "@/types/meta";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface UseMetaReturn {
   variants: MetaVariant[];
@@ -13,6 +14,7 @@ export function useMeta(): UseMetaReturn {
   const [variants, setVariants] = useState<MetaVariant[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { language } = useLanguage();
 
   function reset() {
     setVariants([]);
@@ -28,7 +30,7 @@ export function useMeta(): UseMetaReturn {
       const res = await fetch("/api/meta", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, targetKeyword, tone }),
+        body: JSON.stringify({ topic, targetKeyword, tone, language: language.code }),
       });
 
       const data: { variants?: MetaVariant[]; error?: string } = await res.json();

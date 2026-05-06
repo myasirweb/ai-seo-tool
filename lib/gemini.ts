@@ -10,29 +10,49 @@ export function getGeminiClient() {
   return genAI
 }
 
+const GEMINI_MODEL = "gemini-2.0-flash-lite"
+
 export async function callGemini(
   systemPrompt: string,
-  userMessage: string
+  userMessage: string,
+  retries = 3
 ): Promise<string> {
-  try {
-    const model = genAI.getGenerativeModel(
-      {
-        model: "gemini-2.0-flash-lite",
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1000,
-        },
-      }
-    )
+  const model = genAI.getGenerativeModel({
+    model: GEMINI_MODEL,
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 1000,
+    },
+  })
 
-    const fullPrompt = `${systemPrompt}\n\nUser request: ${userMessage}`
-    const result = await model.generateContent(fullPrompt)
-    const response = await result.response
-    return response.text()
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Gemini API call failed"
-    throw new Error(`Gemini Error: ${message}`)
+  const fullPrompt = `${systemPrompt}\n\nUser request: ${userMessage}`
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const result = await model.generateContent(fullPrompt)
+      return result.response.text()
+    } catch (error) {
+      const message = error instanceof Error ? error.message : ""
+      const is429 = message.includes("429") || message.includes("Too Many Requests") || message.includes("RESOURCE_EXHAUSTED")
+
+      if (is429 && attempt < retries) {
+        const retryMatch = message.match(/retry.*?(\d+)s/i)
+        const waitMs = retryMatch ? parseInt(retryMatch[1]) * 1000 : (attempt + 1) * 5000
+        await new Promise((res) => setTimeout(res, waitMs))
+        continue
+      }
+
+      if (is429) {
+        console.error("[Gemini 429 full error]", error)
+        throw new Error("Gemini API rate limit reached. Please wait a moment and try again.")
+      }
+
+      console.error("[Gemini error]", error)
+      throw new Error(`Gemini Error: ${message || "API call failed"}`)
+    }
   }
+
+  throw new Error("Gemini API call failed after retries.")
 }
 
 export function parseJSON<T>(text: string): T {
